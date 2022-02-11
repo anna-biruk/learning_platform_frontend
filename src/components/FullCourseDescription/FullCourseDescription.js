@@ -1,13 +1,15 @@
 import React from "react"
-import { Grid, Typography, Rating, IconButton, Button } from "@mui/material"
-import { useStaticQuery, graphql } from "gatsby"
+import { Button, Grid, IconButton, Rating, Typography } from "@mui/material"
+import { graphql, useStaticQuery } from "gatsby"
 import { makeStyles } from "@mui/styles"
 import LanguageIcon from "@mui/icons-material/Language"
 import dayjs from "dayjs"
+import { useQuery } from "@apollo/client"
+import { getSelectedCourseQuery } from "../../graphql/courses"
 
 const useStyles = makeStyles(theme => ({
   container: {
-    paddingLeft: 26,
+    paddingLeft: 26
   },
   image: {
     borderRadius: 40,
@@ -15,20 +17,38 @@ const useStyles = makeStyles(theme => ({
     maxHeight: 250,
     width: "100%",
     objectFit: "cover",
-    marginBottom: 0,
-  },
+    marginBottom: 0
+  }
 }))
 
-const FullCourseDescription = () => {
+const data = [{
+  title: "100% Online Course",
+  description: "Lorem ipsum dolor"
+}, {
+  title: "100% Online Course",
+  description: "Lorem ipsum dolor"
+}, {
+  title: "100% Online Course",
+  description: "Lorem ipsum dolor"
+}, {
+  title: "100% Online Course",
+  description: "Lorem ipsum dolor"
+}
+]
+
+const FullCourseDescription = ({ courseItem }) => {
   const classes = useStyles()
-  const [value, setValue] = React.useState(5)
+  const [value] = React.useState(5)
   const fileResponse = useStaticQuery(graphql`
-    query {
-      file(name: { eq: "react-dark" }) {
-        publicURL
+      query {
+          file(name: { eq: "react-dark" }) {
+              publicURL
+          }
       }
-    }
   `)
+
+  const course = useQuery(getSelectedCourseQuery)
+
   return (
     <Grid
       container
@@ -48,13 +68,12 @@ const FullCourseDescription = () => {
       </Grid>
       <Grid item xs={1}>
         <Typography variant="h4">
-          The Complete React Developer Course
+          {course.data?.selectedCourse?.title}
         </Typography>
       </Grid>
       <Grid item xs={1}>
         <Typography variant="subtitle4">
-          Dive in and learn React.js from scratch! Learn Reactjs, Hooks, Redux,
-          React Routing, Animations, Next.js and way more!
+          {course.data?.selectedCourse?.description}
         </Typography>
       </Grid>
       <Grid item container xs={2} direction="row">
@@ -79,57 +98,25 @@ const FullCourseDescription = () => {
         spacing={2}
         xs={3}
       >
-        <Grid item container xs={6} spacing={1}>
-          <Grid item>
-            <IconButton variant="secondary">
-              <LanguageIcon />
-            </IconButton>
-          </Grid>
-          <Grid item>
-            <Typography variant="h5">100% Online Course</Typography>
-            <Typography variant="subtitle2">Lorem Ipsum dolar ipsum</Typography>
-          </Grid>
-        </Grid>
-        <Grid item container xs={6} spacing={1}>
-          <Grid item>
-            <IconButton variant="secondary">
-              <LanguageIcon />
-            </IconButton>
-          </Grid>
-          <Grid item>
-            <Typography variant="h5">100% Online Course</Typography>
-            <Typography variant="subtitle2">Lorem Ipsum dolar ipsum</Typography>
-          </Grid>
-        </Grid>
-        <Grid item container xs={6} spacing={1}>
-          <Grid item>
-            <IconButton variant="secondary">
-              <LanguageIcon />
-            </IconButton>
-          </Grid>
-          <Grid item>
-            <Typography variant="h5">100% Online Course</Typography>
-            <Typography variant="subtitle2">Lorem Ipsum dolar ipsum</Typography>
-          </Grid>
-        </Grid>
-        <Grid item container xs={6} spacing={1}>
-          <Grid item>
-            <IconButton variant="secondary">
-              <LanguageIcon />
-            </IconButton>
-          </Grid>
-          <Grid item>
-            <Typography variant="h5">100% Online Course</Typography>
-            <Typography variant="subtitle2">Lorem Ipsum dolar ipsum</Typography>
-          </Grid>
-        </Grid>
+        {data.map((item) => {
+          return (
+            <Grid item container xs={6} spacing={1}>
+              <Grid item>
+                <IconButton variant="secondary">
+                  <LanguageIcon />
+                </IconButton>
+              </Grid>
+              <Grid item>
+                <Typography variant="h5">{item.title}</Typography>
+                <Typography variant="subtitle2">{item.description}</Typography>
+              </Grid>
+            </Grid>
+          )
+        })}
       </Grid>
       <Grid item>
         <Typography variant="subtitle4">
-          This course is the most up-to-date, comprehensive and bestselling
-          React course on Udemy! It was completely updated and re-recorded from
-          the ground up - it teaches the very latest version of React with all
-          the core, modern features you need to know!
+          {course.data?.selectedCourse?.fullDescription}
         </Typography>
       </Grid>
     </Grid>

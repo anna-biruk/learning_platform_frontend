@@ -2,11 +2,12 @@ import React from "react"
 import { Grid, Typography } from "@mui/material"
 import { useStaticQuery, graphql } from "gatsby"
 import { makeStyles } from "@mui/styles"
+import { setSelectedCourse } from "../../graphql/cache"
 
 const useStyles = makeStyles(theme => ({
   image: {
     borderRadius: 10,
-    marginBottom: 0,
+    marginBottom: 0
   },
   container: {
     backgroundColor: "#ffffffad",
@@ -14,20 +15,24 @@ const useStyles = makeStyles(theme => ({
     padding: 10,
     paddingTop: 8,
     "&:hover": {
-      backgroundColor: "#ffffff6b",
-    },
-  },
+      backgroundColor: "#ffffff6b"
+    }
+  }
 }))
 
 const CourseCardSmall = ({ courseItem }) => {
   const classes = useStyles()
   const fileResponse = useStaticQuery(graphql`
-    query {
-      file(name: { eq: "react-dark" }) {
-        publicURL
+      query {
+          file(name: { eq: "react-dark" }) {
+              publicURL
+          }
       }
-    }
   `)
+
+  const handleClick = () => {
+    setSelectedCourse({ ...courseItem, __typename: undefined })
+  }
 
   return (
     <Grid
@@ -36,6 +41,7 @@ const CourseCardSmall = ({ courseItem }) => {
       spacing={1}
       justifyContent="center"
       className={classes.container}
+      onClick={handleClick}
     >
       <Grid item xs={4}>
         <img

@@ -1,24 +1,18 @@
 import React from "react"
 import { Grid } from "@mui/material"
 import CourseCardSmall from "../CourseCard/CourseCardSmall"
+import { useQuery } from "@apollo/client"
+import { getCoursesQuery, getSelectedCourseQuery } from "../../graphql/courses"
 
-const data = [
-  {
-    title: "Modern React with Redux",
-    description:
-      "Master React and Redux with React Router, Webpack, and Create-React-App. Includes Hooks.",
-  },
-  { title: "JavaScript", description: "JavaScript" },
-  { title: "React", description: "React" },
-  { title: "HTML/CSS", description: "HTML,CSS3,SCCS" },
-  { title: "JavaScript", description: "JavaScript" },
-  { title: "React", description: "React" },
-]
 
 const CoursesListByLevel = () => {
+  const coursesResponse = useQuery(getCoursesQuery)
+  const course = useQuery(getSelectedCourseQuery)
+
+  console.log({ course })
   return (
     <Grid container direction="column" spacing={2}>
-      {data.map(item => {
+      {coursesResponse?.data?.courses?.map(item => {
         return (
           <Grid item>
             <CourseCardSmall courseItem={item} />

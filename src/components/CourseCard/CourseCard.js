@@ -45,7 +45,7 @@ const CourseCard = ({ courseItem }) => {
           <Grid item xs={5}>
             <Typography variant="h5">{courseItem.title}</Typography>
             <Typography variant="subtitle2" color="text.secondary">
-              {courseItem.technologies}
+              {courseItem.technologies.join(', ')}
             </Typography>
           </Grid>
           <Grid item xs={2}>
